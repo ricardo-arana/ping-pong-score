@@ -7,12 +7,28 @@
 
 import SwiftUI
 
-struct LayoutView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct LayoutView<Content: View>: View {
+    let content: Content
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
     }
-}
-
-#Preview {
-    LayoutView()
+    
+    
+    var body: some View {
+        GeometryReader { proxy in
+            Group {
+                if proxy.size.width > proxy.size.height {
+                    HStack {
+                        content
+                    }
+                } else {
+                    VStack {
+                        content
+                    }
+                }
+            }
+        }
+                
+    }
 }
